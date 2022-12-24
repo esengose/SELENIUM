@@ -8,6 +8,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class HomeworkCh2 {
@@ -27,37 +28,47 @@ public class HomeworkCh2 {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
         //Navigate to http://tutorialsninja.com/demo/index.php?route=common/home
         driver.get("http://tutorialsninja.com/demo/index.php?route=common/home");
-
+        Thread.sleep(3000);
         //click on Phones & PDAs
         driver.findElement(By.xpath("//*[text()='Phones & PDAs']")).click();
+        Thread.sleep(3000);
 
         //get the brandName of phones
-        List<WebElement> brandNameList = driver.findElements(By.tagName("h4"));
-        for (WebElement w : brandNameList) {
-            System.out.println(w.getText());
-            System.out.println();
-        }
+            List<WebElement> brandNameList = driver.findElements(By.tagName("h4"));
+            List<String>firstlist=new ArrayList<>();
+            for (WebElement w : brandNameList) {
+                firstlist.add(w.getText());
+            }
+        Collections.sort(firstlist);
+        System.out.println(firstlist);
+
+
         //click on add to button for all elements
         List<WebElement> phonesadd = driver.findElements(By.xpath("//*[@class='button-group']"));
         for (int i = 0; i < phonesadd.size(); i++) {
             phonesadd.get(i).click();
-        }
+
+        }Thread.sleep(3000);
         //click on black total added cart button
-        // olmadı ---> driver.findElement(By.xpath("//*[@class='breadcrumb']")).click();
-        // olmadı ----> driver.findElement(By.xpath("//span[@id='cart-total']")).click();
-        // olmadı ---> driver.findElement(By.xpath("//*[text()='3 item(s)-$583.19']")).click()
-        // driver.findElement(By.id("cart-total")).click();
-        driver.findElement(By.id("cart-total")).click(); //b
+
+       driver.findElement(By.xpath("//span[@id='cart-total']")).click();
+
+        //driver.findElement(By.id("cart-total")).click();  bu da olur
+
         Thread.sleep(3000);
 
         //get the names of list from the cart
-       List<WebElement> inCart= driver.findElements(By.tagName("tbody"));
+       List<WebElement> inCart= driver.findElements(By.xpath("//*[@class='text-left']"));
+       List<String>secondlist=new ArrayList<>();
        for(WebElement w:inCart){
-           System.out.println(w.getText());
+           secondlist.add(w.getText());
        }
+       Collections.sort(secondlist);
+        System.out.println(secondlist);
         Thread.sleep(3000);
+
         // compare the names from displaying list and cart list
-        if(brandNameList.equals(inCart)){
+        if(firstlist.equals(secondlist)){
             System.out.println("list test passed");
         } else System.out.println("list test failed");
         Thread.sleep(3000);
