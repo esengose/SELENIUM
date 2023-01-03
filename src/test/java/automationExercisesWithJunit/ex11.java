@@ -54,6 +54,8 @@ public class ex11 {
         WebElement successmessage=driver.findElement(By.xpath("//div[@class='alert-success alert']"));
         System.out.println(successmessage.getText());
         successmessage.isDisplayed();
+
+        driver.close();
     }
 
 

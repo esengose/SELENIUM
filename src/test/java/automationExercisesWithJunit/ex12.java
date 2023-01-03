@@ -49,6 +49,7 @@ public class ex12 {
 
         //6. Click 'Continue Shopping' button
         driver.findElement(By.xpath("//*[@class='btn btn-success close-modal btn-block']")).click();
+        Thread.sleep(2000);
 
 
         //7. Hover over second product and click 'Add to cart'
@@ -68,6 +69,12 @@ public class ex12 {
 
 
         //10. Verify their prices, quantity and total price
+        List<WebElement>products=driver.findElements(By.xpath("//tbody"));
+        for(WebElement w: products){
+            System.out.println(w.getText());
+            Assert.assertTrue(w.isDisplayed());
+        }
+        driver.close();
     }
 
 }
