@@ -1,51 +1,66 @@
 package challange_quest;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-import utilities.TestBase;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.time.Duration;
 
-public class chl09 extends TestBase {
-    @Test
-    public void test() throws InterruptedException {
-        //go to web site : https://www.jqueryscript.net/demo/Easy-iFrame-based-Twitter-Emoji-Picker-Plugin-jQuery-Emoojis/
-        driver.get(" https://www.jqueryscript.net/demo/Easy-iFrame-based-Twitter-Emoji-Picker-Plugin-jQuery-Emoojis/");
-        Thread.sleep(3000);
-        //maximize the web site
+public class chl09 {
+    WebDriver driver;
 
-        // ikinci emojiye tıklayın
-        int size = driver.findElements(By.tagName("iFrame")).size();
-        System.out.println("Toplam iFrame sayısı: " + size);
-        WebElement iframe = driver.findElement(By.xpath("(//iframe[@id='emoojis'])"));
-        driver.switchTo().frame(iframe);
-        driver.findElement(By.xpath("(//span[@class='mdl-tabs__ripple-container mdl-js-ripple-effect'])[2]")).click();
-
-        Thread.sleep(2000);
-
-        // ikinci emoji altındaki tüm öğelere tıklayın
-        List<WebElement> emojiler = driver.findElements(By.xpath("//div[@id='nature']/div/img"));
-        for (WebElement w : emojiler) {
-            w.click();
-        }
-        Thread.sleep(2000);
-        // ana iframe'e geri dön
-        driver.switchTo().defaultContent();
-
-        //formu doldurun,(Formu istediğiniz metinlerle doldurun)
-        List<WebElement>inputPlace=driver.findElements(By.xpath("//input"));
-        List<String>inputs=new ArrayList<>(Arrays.asList("PRETTY","LITTLE","LIARS","HOW","TO","TRAIN","YOUR","DRAGON","?","?","?"));
-for (int i=0; i< inputPlace.size(); i++){
-    inputPlace.get(i).sendKeys(inputs.get(i));
-}
-Thread.sleep(9000);
-        // uygula butonuna tıklayın
-        driver.findElement(By.xpath("//button[@id='send']")).click();
-
+    @Before
+    public void setUp() {
+        WebDriverManager.chromedriver().setup();
+        driver = new ChromeDriver();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));//15 seconds wait in case needed
+        driver.manage().window().maximize();
     }
 
+    @Test
+    public void test() throws InterruptedException {
+
+        // go to url :http://demo.automationtesting.in/Alerts.html
+        driver.get("http://demo.automationtesting.in/Alerts.html");
+
+        //    click  "Alert with OK" and click 'click the button to display an alert box:'
+        driver.findElement(By.xpath("//a[@href='#OKTab']")).click();
+        driver.findElement(By.xpath("//button[@class='btn btn-danger']")).click();
+        Thread.sleep(3000);
+
+        //    accept Alert(I am an alert box!) and print alert on console
+        System.out.println(driver.switchTo().alert().getText());
+        driver.switchTo().alert().accept();
+
+        //    click "Alert with OK & Cancel" and click 'click the button to display a confirm box'
+        driver.findElement(By.xpath("//a[@href='#CancelTab']")).click();
+        driver.findElement(By.xpath("//button[@class='btn btn-primary']")).click();
+        Thread.sleep(3000);
+
+
+        //    cancel Alert  (Press a Button !)
+
+        System.out.println(driver.switchTo().alert().getText());
+        driver.switchTo().alert().dismiss();
+
+        //    click "Alert with Textbox" and click 'click the button to demonstrate the prompt box'
+        driver.findElement(By.xpath("//a[@href='#Textbox']")).click();
+        driver.findElement(By.xpath("//button[@class='btn btn-info']")).click();
+        Thread.sleep(2000);
+
+        //    and then sendKeys 'TechProEducation' (Please enter your name)
+        driver.switchTo().alert().sendKeys("Techproeducation esen");
+        driver.switchTo().alert().accept();
+
+        //    finally print on console this mesaaje "Hello TechproEducation How are you today"
+
+        String message = driver.findElement(By.xpath("//*[@id='demo1']")).getText();
+        Assert.assertTrue(message.contains("esen"));
+
+    }
 
 }
